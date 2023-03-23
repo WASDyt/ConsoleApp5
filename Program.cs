@@ -1,80 +1,89 @@
-﻿using System;
-//public class Example
-//{
-//    static void Main(string[] args)
-//    {
-//        Console.WriteLine("Введите количество чисел");
-//        int N = int.Parse(Console.ReadLine());
-//        int[] arr = new int[N];
-//        Random random = new Random();
+﻿using System.Diagnostics;
 
-//        for (int i = 0; i < N; i++)
-//            arr[i] = random.Next(-100, 100);
-
-//        Console.WriteLine("Сортировка выбором");
-//        Console.Write("Исходный массив: ");
-//        for (int i = 0; i < N; i++)
-//        {
-//            Console.Write(arr[i] + " ");
-//        }
-//        int temp, smallest;
-//        for (int i = 0; i < N - 1; i++)
-//        {
-//            smallest = i;
-//            for (int j = i + 1; j < N; j++)
-//            {
-//                if (arr[j] < arr[smallest])
-//                {
-//                    smallest = j;
-//                }
-//            }
-//            temp = arr[smallest];
-//            arr[smallest] = arr[i];
-//            arr[i] = temp;
-//        }
-//        Console.WriteLine();
-//        Console.Write("Отсортированный массив: ");
-//        for (int i = 0; i < N; i++)
-//        {
-//            Console.Write(arr[i] + " ");
-//        }
-//    }
-//}
-static int[] shellSort(int[] array)
+class Program
 {
-    var length = array.Length;
-    var h = 1;
-    while (h < length / 3)
+    //метод для обмена элементов
+    static void Swap(ref int a, ref int b)
     {
-        h = 3 * h + 1;
+        var t = a;
+        a = b;
+        b = t;
     }
-    while (h > 0)
+    // Шелл
+    //static int[] ShellSort(int[] array)
+    //{
+    //    //расстояние между элементами, которые сравниваются
+    //    var d = array.Length / 2;
+    //    while (d >= 1)
+    //    {
+    //        for (var i = d; i < array.Length; i++)
+    //        {
+    //            var j = i;
+    //            while ((j >= d) && (array[j - d] > array[j]))
+    //            {
+    //                Swap(ref array[j], ref array[j - d]);
+    //                j = j - d;
+    //            }
+    //        }
+
+    //        d = d / 2;
+    //    }
+
+    //    return array;
+    //}
+
+    //сортировка пузырьком
+    //static int[] BubbleSort(int[] array)
+    //{
+    //    var len = array.Length;
+    //    for (var i = 1; i < len; i++)
+    //    {
+    //        for (var j = 0; j < len - i; j++)
+    //        {
+    //            if (array[j] > array[j + 1])
+    //            {
+    //                Swap(ref array[j], ref array[j + 1]);
+    //            }
+    //        }
+    //    }
+
+    //    return array;
+    //}
+
+    //сортировка вставками
+    static int[] InsertionSort(int[] array)
     {
-        for (var i = h; i < length; i++)
+        for (var i = 1; i < array.Length; i++)
         {
-            for (var j = i; j > 0 && array[j] < array[j - h]; j -= h)
+            var key = array[i];
+            var j = i;
+            while ((j > 1) && (array[j - 1] > key))
             {
-                {
-                    var x = array[j];
-                    array[j] = array[j - h];
-                    array[j - h] = x;
-                }
+                Swap(ref array[j - 1], ref array[j]);
+                j--;
             }
+
+            array[j] = key;
         }
-        h = -h / 3;
+
+        return array;
     }
-    return array;
+
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int[] array1 = new int[100000];
+        for (int i = 0; i < 100000; i++)
+        {
+            array1[i] = random.Next(-100000, 100000);
+        }
+        Console.WriteLine();
+        Stopwatch stopwatch= new Stopwatch();
+        stopwatch.Start();
+        //int[] array2 = ShellSort(array1);
+        //int[] array2 = BubbleSort(array1);
+        int[] array2 = InsertionSort(array1);
+        stopwatch.Stop();
+        Console.WriteLine(stopwatch.ElapsedMilliseconds);
+    }
 }
-Random random = new Random();
-int[] array1 = new int[100];
-for (int i = 0; i < 100; i++)
-{ array1[i] = random.Next(-100, 100); }
-Console.WriteLine("Исходный массив");
-foreach(int arr in array1)
-    Console.WriteLine($"{arr}");
-Console.WriteLine();
-int[] array2 = shellSort(array1);
-Console.WriteLine("Сортированный массив");
-foreach (int arr in array2)
-    Console.WriteLine($"{arr}");
-Console.WriteLine() ;
